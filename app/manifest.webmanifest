@@ -2,7 +2,7 @@
     "id": "/",
     "name": "Tasker",
     "short_name": "Tasker",
-    "description": "A simple, local-first place for everyday tasks, sessions, expenses, subscriptions, debts, and things to revisit.",
+    "description": "A simple, local-first personal application for tasks and timed sessions.",
     "start_url": "/",
     "scope": "/",
     "display": "standalone",
@@ -32,8 +32,8 @@
         {
             "name": "Start a session",
             "short_name": "Session",
-            "description": "Start the timer with this as its title",
-            "url": "/quick?do=session",
+            "description": "Start the timer",
+            "url": "/session",
             "icons": [
                 {
                     "src": "/icons/icon-192.png",
@@ -43,36 +43,10 @@
             ]
         },
         {
-            "name": "Write a note",
-            "short_name": "Note",
-            "description": "Open a note to come back to",
-            "url": "/quick?do=note",
-            "icons": [
-                {
-                    "src": "/icons/icon-192.png",
-                    "sizes": "192x192",
-                    "type": "image/png"
-                }
-            ]
-        },
-        {
-            "name": "Record income",
-            "short_name": "Income",
-            "description": "Log money you received",
-            "url": "/quick?do=income",
-            "icons": [
-                {
-                    "src": "/icons/icon-192.png",
-                    "sizes": "192x192",
-                    "type": "image/png"
-                }
-            ]
-        },
-        {
-            "name": "Record an expense",
-            "short_name": "Expense",
-            "description": "Log money you spent",
-            "url": "/quick?do=expense",
+            "name": "New task",
+            "short_name": "Task",
+            "description": "Add what you mean to do",
+            "url": "/tasks/new",
             "icons": [
                 {
                     "src": "/icons/icon-192.png",

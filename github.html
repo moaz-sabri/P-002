@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tasker — Tasks & Sessions</title>
+<meta name="description" content="A simple, local-first personal app for tasks, timed sessions, and where your time went.">
+<style>
+*{box-sizing:border-box}
+:root{
+  --bg:#0d1117;--panel:#161b22;--text:#e6edf3;--muted:#8b949e;--accent:#2f81f7;--accent2:#238636;
+  --line:#30363d;--soft:#21262d;
+}
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:linear-gradient(180deg,#0d1117,#111827);color:var(--text);line-height:1.65}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.container{max-width:1120px;margin:0 auto;padding:0 20px}
+.nav{position:sticky;top:0;background:rgba(13,17,23,.85);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);z-index:10}
+.nav .container{display:flex;align-items:center;justify-content:space-between;padding:14px 20px}
+.brand{font-weight:700;font-size:1.05rem}
+.hero{padding:76px 0 44px}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:36px;align-items:start}
+h1{font-size:2.9rem;line-height:1.1;margin:0 0 16px}
+.lead{font-size:1.15rem;color:var(--muted);max-width:640px}
+.pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--soft);border-radius:999px;padding:7px 12px;margin:10px 10px 0 0;font-size:.92rem;color:var(--muted)}
+.actions{margin-top:24px;display:flex;flex-wrap:wrap;gap:12px}
+.btn{display:inline-block;padding:11px 15px;border-radius:10px;border:1px solid var(--line);font-weight:600}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.ghost{background:var(--panel)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.mock{padding:24px}
+.mock-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line);color:var(--muted)}
+.mock-row:last-child{border-bottom:none}
+.mock-time{font-size:2.1rem;font-weight:800;color:var(--text)}
+.section{padding:52px 0}
+.section h2{font-size:1.9rem;margin:0 0 12px}
+.grid{display:grid;gap:18px}
+.grid3{grid-template-columns:repeat(3,1fr)}
+.grid2{grid-template-columns:repeat(2,1fr)}
+.feature h3{margin:0 0 8px;font-size:1.12rem}
+.feature p{color:var(--muted);margin:0}
+.steps{counter-reset:step;list-style:none;padding:0;margin:0}
+.steps li{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--line)}
+.steps li:last-child{border-bottom:none}
+.steps b{width:34px;height:34px;flex:0 0 34px;display:flex;align-items:center;justify-content:center;background:var(--accent);color:#fff;border-radius:50%;font-size:.95rem}
+.arch{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.92rem;color:var(--muted);background:#0b0f14;border:1px solid var(--line);border-radius:12px;padding:16px;overflow:auto}
+.kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}
+.kpi div{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:16px}
+.kpi .n{font-size:1.7rem;font-weight:800}
+.kpi .l{color:var(--muted);font-size:.92rem}
+.footer{padding:36px 0;border-top:1px solid var(--line);color:var(--muted);font-size:.95rem}
+@media (max-width:900px){h1{font-size:2.2rem}.hero-grid,.grid3,.kpi{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="container">
+    <div class="brand">Tasker</div>
+    <a href="#how">How it works</a>
+  </div>
+</nav>
+
+<main class="container hero">
+  <div class="hero-grid">
+    <div>
+      <h1>A simple timer for your time and tasks.</h1>
+      <p class="lead">Tasker — Tasks & Sessions is a small, local-first personal application. Start a timed session, attach a task, and see where your attention actually went.</p>
+      <div>
+        <span class="pill">Local-first by default</span>
+        <span class="pill">Runs offline as a PWA</span>
+        <span class="pill">No analytics or tracking</span>
+        <span class="pill">Optional end-to-end encrypted sync</span>
+      </div>
+      <div class="actions">
+        <a class="btn primary" href="#how">See how it works</a>
+        <a class="btn ghost" href="#features">Features</a>
+        <a class="btn ghost" href="#privacy">Privacy</a>
+      </div>
+      <div class="kpi">
+        <div><div class="n">0 deps</div><div class="l">Runtime dependencies</div></div>
+        <div><div class="n">100%</div><div class="l">Local by default</div></div>
+        <div><div class="n">PWA</div><div class="l">Installable offline app</div></div>
+      </div>
+    </div>
+    <div class="card mock">
+      <div class="mock-row"><span>Current session</span><span class="mock-time">00:42</span></div>
+      <div class="mock-row"><span>Running session: Tasker build work</span><span>in progress</span></div>
+      <div class="mock-row"><span>Task: Write documentation</span><span>30m estimate</span></div>
+      <div class="mock-row"><span>Today’s usage</span><span>Active</span></div>
+      <div class="mock-row"><span>Reports</span><span>Total time + sessions</span></div>
+    </div>
+  </div>
+</main>
+
+<section class="container section" id="features">
+  <h2>What you can do</h2>
+  <div class="grid grid3">
+    <div class="card feature">
+      <h3>Tasks</h3>
+      <p>Keep what you mean to do, with an optional estimate, planned date, subtasks, and running history.</p>
+    </div>
+    <div class="card feature">
+      <h3>Sessions</h3>
+      <p>A timer for one piece of work. It stays on screen while you move around, and records time segments and events.</p>
+    </div>
+    <div class="card feature">
+      <h3>Reports</h3>
+      <p>See where your time went: total time, session count, completed tasks, average session length, and active days.</p>
+    </div>
+    <div class="card feature">
+      <h3>Sync</h3>
+      <p>Optional sync keeps devices aligned using encrypted records. The default is fully local.</p>
+    </div>
+    <div class="card feature">
+      <h3>Backup</h3>
+      <p>Export and import your data with a password and owner code, with no lock-in.</p>
+    </div>
+    <div class="card feature">
+      <h3>Settings</h3>
+      <p>Language, backup, device integration, wake lock, haptics, sound, and notification preferences.</p>
+    </div>
+  </div>
+</section>
+
+<section class="container section" id="how">
+  <h2>How it works</h2>
+  <ol class="steps">
+    <li><b>1</b><div><strong>Create a task</strong><div class="muted">Give it an estimate, a planned date, and optional subtasks.</div></div></li>
+    <li><b>2</b><div><strong>Start a session</strong><div class="muted">Start a task session or a free session. The timer counts up and remains visible.</div></div></li>
+    <li><b>3</b><div><strong>Pause or finish</strong><div class="muted">The record moves through running → paused → completed/cancelled, with segments and events.</div></div></li>
+    <li><b>4</b><div><strong>Review results</strong><div class="muted">Reports derive figures on read from records that already exist.</div></div></li>
+    <li><b>5</b><div><strong>Sync if you want</strong><div class="muted">Sync is optional. Records are encrypted before they leave your device.</div></div></li>
+  </ol>
+</section>
+
+<section class="container section">
+  <h2>Architecture</h2>
+  <div class="arch">
+Frontend (PWA, plain ES modules, no framework)
+ ↓
+Local storage (IndexedDB) ← primary store
+ ↓
+Application logic (services / domain / repositories)
+ ↓
+Optional sync → API (PHP single front controller)
+ ↓
+SQLite (PDO, ciphertext only)
+  </div>
+  <div class="grid grid2" style="margin-top:18px">
+    <div class="card feature">
+      <h3>Local-first</h3>
+      <p>Your records live in this browser’s IndexedDB. The app works without a server, network, or account.</p>
+    </div>
+    <div class="card feature">
+      <h3> Derived, never stored</h3>
+      <p>Reports and summary figures are computed on read. No total is persisted and no report cache drifts.</p>
+    </div>
+  </div>
+</section>
+
+<section class="container section" id="privacy">
+  <h2>Privacy</h2>
+  <div class="card feature">
+    <p>No analytics, no telemetry, and no third-party requests. The only network calls are to your own origin, only when you enable sync. Sync is end-to-end encrypted with AES-256-GCM; the server stores ciphertext and holds no key.</p>
+    <p style="margin-top:12px">No password recovery is provided by design. A lost password means a new space cannot be opened from a new device, while records already on your devices stay unaffected.</p>
+  </div>
+</section>
+
+<section class="container section">
+  <h2>Run locally</h2>
+  <div class="arch">
+npm ci
+npm run build        # webpack --mode production → app/dist/
+npm run dev          # build, then PHP server on http://127.0.0.1:8080
+  </div>
+  <p class="muted" style="margin-top:12px">Requires Node.js ≥ 20 and PHP ≥ 8.0 with pdo_sqlite and mbstring.</p>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <strong>Tasker</strong> — licensed under <strong>AGPL-3.0-or-later</strong>. Built by TAM — Sabri. Simple by design: if the need is simple, the tool should be simple too.
+  </div>
+</footer>
+</body>
+</html>
