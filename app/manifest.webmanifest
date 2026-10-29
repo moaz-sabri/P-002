@@ -1,7 +1,7 @@
 {
     "id": "/",
-    "name": "Tadkhir",
-    "short_name": "Tadkhir",
+    "name": "Tasker",
+    "short_name": "Tasker",
     "description": "A simple, local-first place for everyday tasks, sessions, expenses, subscriptions, debts, and things to revisit.",
     "start_url": "/",
     "scope": "/",

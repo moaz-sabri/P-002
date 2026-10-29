@@ -29,6 +29,7 @@ function applyLanguage() {
 }
 
 export function t(key, params = {}) {
+    if (typeof key !== "string") return key == null ? "" : String(key);
     let v = key.split(".").reduce((o, k) => o?.[k], strings[lang]);
     if (typeof v !== "string") return key;
     return v.replace(/\{(\w+)\}/g, (_, k) => params[k] ?? "");

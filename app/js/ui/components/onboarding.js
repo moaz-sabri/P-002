@@ -43,7 +43,7 @@ const CONFIRM_WORD = "ok";
 //              password form and has no idea what they are being set up for
 //
 // Somebody who attaches an existing key skips create AND brief and lands in the
-// app. They already know what Tadkhir is — they are using it on another
+// app. They already know what Tasker is — they are using it on another
 // device — and showing them a tour of features they have already used is the
 // slowest possible way to let them back in.
 //
@@ -69,9 +69,6 @@ const MIN_OWNER_LENGTH = 6;
 const BRIEF_SECTIONS = [
     ["clock", "briefSessions", "briefSessionsHint"],
     ["tasks", "briefTasks", "briefTasksHint"],
-    ["bookmark", "briefLater", "briefLaterHint"],
-    ["file", "briefPages", "briefPagesHint"],
-    ["wallet", "briefFinance", "briefFinanceHint"],
     ["chart", "briefReports", "briefReportsHint"],
     ["sliders", "briefSettings", "briefSettingsHint"]
 ];

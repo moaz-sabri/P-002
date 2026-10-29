@@ -1,6 +1,6 @@
 # NOTICE
 
-Tadkhir
+Tasker
 Copyright (C) 2026 TAM — Sabri (https://moazsabri.org)
 
 ## Attribution
@@ -15,12 +15,12 @@ This notice exists so that the origin of this software is never ambiguous.
   covering this work. Do not redistribute it under GPL-3.0, MIT, or any other
   identifier, alone or paired: two licences for one work contradict each other,
   and the more permissive one is the one that gets enforced.
-- **Repository:** <https://github.com/moaz-sabri/tadkhir>
+- **Repository:** <https://github.com/moaz-sabri/Tasker>
 
 ## What you must keep
 
 The AGPL requires that recipients of the software receive this licence and keep
-these notices. If you distribute Tadkhir, modified or unmodified, keep this file,
+these notices. If you distribute Tasker, modified or unmodified, keep this file,
 `LICENSE`, and the attribution above intact.
 
 You do **not** have to:
@@ -36,7 +36,7 @@ brand, or sell your version is yours.
 
 ## Third-party code
 
-Tadkhir has **no runtime dependencies and no bundled third-party code.** Every
+Tasker has **no runtime dependencies and no bundled third-party code.** Every
 build-time dependency in `devDependencies` is MIT-licensed and is installed from
 the npm registry at build time rather than redistributed here. There are no
 external fonts, icon sets, or images loaded at runtime, and no third-party

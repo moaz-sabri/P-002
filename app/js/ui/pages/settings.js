@@ -7,7 +7,6 @@ import { backupService } from "../../services/backup-service.js";
 import { syncService } from "../../services/sync-service.js";
 import * as cryptoService from "../../services/crypto-service.js";
 import { authService } from "../../services/auth-service.js";
-import { attachmentService } from "../../services/attachment-service.js";
 import { haptics } from "../../app/haptics.js";
 import { notifications } from "../../app/notifications.js";
 import { captureAvailability, permissionState, requestCapturePermission } from "../../app/capture.js";
@@ -405,58 +404,7 @@ function buildDeviceSection() {
  * It is behind a confirm because it is the one control on this screen that cannot
  * be undone from where it was pressed.
  */
-function buildAttachmentSection() {
-    const usageEl = h("p", { class: "muted small", id: "attachment-usage" }, t("common.loading"));
-    const clearBtn = action({
-        label: t("settings.attachmentsClear"),
-        icon: "trash",
-        tone: "danger",
-        disabled: true,
-        onClick: async () => {
-            if (!await dialog.confirm("settings.attachmentsClearConfirm")) return;
-            clearBtn.disabled = true;
-            try {
-                const freed = await attachmentService.clearAll();
-                usageEl.textContent = t("settings.attachmentsFreed", { size: formatBytes(freed) });
-                toast.show("settings.attachmentsCleared");
-            } catch (e) {
-                toast.show(`error.${e?.code || "unexpected"}`);
-            } finally {
-                refreshUsage();
-            }
-        }
-    });
-
-    async function refreshUsage() {
-        try {
-            const bytes = await attachmentService.byteUsage();
-            usageEl.textContent = bytes
-                ? t("settings.attachmentsUsed", { size: formatBytes(bytes) })
-                : t("settings.attachmentsNone");
-            clearBtn.disabled = !bytes;
-        } catch (e) {
-            // A usage figure that cannot be read is reported as unknown rather
-            // than as zero: "nothing stored" is a claim, and a store that failed
-            // to open is not the same thing.
-            usageEl.textContent = t("settings.attachmentsUnknown");
-        }
-    }
-
-    const section = pageSection({
-        title: t("settings.attachmentsTitle"),
-        icon: "image",
-        body: h("div", {},
-            h("p", { class: "muted small" }, t("settings.attachmentsHint")),
-            usageEl,
-            toolbar(clearBtn)
-        )
-    });
-
-    // Read on the way out, the way the two existing async rows do: a figure read
-    // by a mount that has since been replaced must not land in the next one.
-    refreshUsage();
-    return section;
-}
+function buildAttachmentSection() { return null; }
 
 export const settingsPage = {
     title: () => t("nav.settings"),

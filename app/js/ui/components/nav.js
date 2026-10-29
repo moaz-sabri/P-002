@@ -39,13 +39,7 @@ import { pickRow, sectionTitle } from "./ui.js";
 export const NAV_LABELS = {
     "/": "nav.home",
     "/tasks": "nav.tasks",
-    "/routines": "nav.routines",
-    "/later": "nav.later",
-    "/finance": "nav.finance",
-    "/pages": "nav.pages",
-    "/kanban": "nav.kanban",
     "/sessions": "nav.sessions",
-    "/log": "nav.log",
     "/reports": "nav.reports",
     "/settings": "nav.settings"
 };
@@ -61,8 +55,8 @@ export const NAV_LABELS = {
  *  to be a bar destination of its own, which put "what happened" and "the
  *  sessions it happened in" two taps and a layer apart. */
 export const NAV_LAYERS = Object.freeze([
-    { key: "nav.groupServices", icon: "tasks", paths: ["/tasks", "/routines", "/later", "/finance"] },
-    { key: "nav.groupTools", icon: "kanban", paths: ["/pages", "/kanban", "/sessions", "/log", "/reports"] },
+    { key: "nav.groupServices", icon: "tasks", paths: ["/tasks"] },
+    { key: "nav.groupTools", icon: "clock", paths: ["/sessions", "/reports"] },
     { key: "nav.groupManage", icon: "sliders", paths: ["/settings"] }
 ]);
 

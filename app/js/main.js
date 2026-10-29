@@ -16,19 +16,8 @@ import { taskDetail } from "./ui/pages/task-detail.js";
 import { sessionsPage } from "./ui/pages/sessions.js";
 import { sessionDetail } from "./ui/pages/session-detail.js";
 import { currentSession } from "./ui/pages/current-session.js";
-import { financePage } from "./ui/pages/finance.js";
-import { transactionsPage, newTransaction, transactionDetail } from "./ui/pages/finance-transactions.js";
-import { recurringPage, newRecurring, recurringDetail } from "./ui/pages/finance-recurring.js";
-import { debtsPage, newDebt, debtDetail } from "./ui/pages/finance-debts.js";
-import { financeCategoriesPage } from "./ui/pages/finance-categories.js";
-import { laterPage, newLater, laterDetail } from "./ui/pages/later.js";
-import { pagesPage, pageDetail } from "./ui/pages/pages.js";
-import { routinesPage, newRoutine, routineDetail } from "./ui/pages/routines.js";
-import { kanbanPage } from "./ui/pages/kanban.js";
-import { sharePage } from "./ui/pages/share.js";
-import { quickPage } from "./ui/pages/quick.js";
 import { reportsPage } from "./ui/pages/reports.js";
-import { logPage } from "./ui/pages/log.js";
+import { sharePage } from "./ui/pages/share.js";
 import { morePage } from "./ui/pages/more.js";
 import { settingsPage } from "./ui/pages/settings.js";
 import { installPage } from "./ui/pages/install.js";
@@ -53,72 +42,10 @@ defineRoutes([
     { path: "/sessions", page: sessionsPage },
     { path: "/sessions/:id", page: sessionDetail },
     { path: "/session", page: currentSession },
-    { path: "/finance", page: financePage },
-    { path: "/finance/transactions", page: transactionsPage },
-    { path: "/finance/transactions/new", page: newTransaction },
-    // One route for both directions, with the type as a parameter. Two literal
-    // paths could not do this: the pattern has no `:segment`, so match() built no
-    // params and `params.type` was always undefined — which meant the home
-    // screen's "add income" button silently opened the form pre-selected as an
-    // expense, and the only hint was the user's own mistake later.
-    { path: "/finance/transactions/new/:type", page: newTransaction },
-    { path: "/finance/transactions/:id", page: transactionDetail },
-    { path: "/finance/recurring", page: recurringPage },
-    { path: "/finance/recurring/new", page: newRecurring },
-    { path: "/finance/recurring/:id", page: recurringDetail },
-    { path: "/finance/debts", page: debtsPage },
-    { path: "/finance/debts/new", page: newDebt },
-    { path: "/finance/debts/:id", page: debtDetail },
-    { path: "/finance/categories", page: financeCategoriesPage },
-    { path: "/later", page: laterPage },
-    { path: "/later/new", page: newLater },
-    { path: "/later/:id", page: laterDetail },
-    // No /pages/new: a page is created untitled by the list's "New page" action
-    // and named on the editor it lands on, so there is no form screen to route
-    // to and nothing to clean up if the user backs out of it.
-    { path: "/pages", page: pagesPage },
-    { path: "/pages/:id", page: pageDetail },
-    // Routines are the SECOND service, and the order in ui/components/nav.js is
-    // the priority: the person, then what they are doing today, then what they
-    // keep doing, then what they are saving, then what they spend. They used to be
-    // argued about — kept off the bar while it was nine items wide, on the
-    // argument that a routine belongs on the home screen — and the argument was
-    // about WIDTH, not about importance. A menu has room for everything, so the
-    // question is settled by where the thing sits in the day's thinking, and a
-    // daily habit is in it before a note is.
-    { path: "/routines", page: routinesPage },
-    { path: "/routines/new", page: newRoutine },
-    { path: "/routines/:id", page: routineDetail },
-    { path: "/kanban", page: kanbanPage },
     { path: "/share", page: sharePage },
-    // The manifest's four shortcuts, and the cross-browser answer to them. Not a
-    // destination anybody navigates to: like Settings, it is a thing a person does
-    // from OUTSIDE the app — a long press on the launcher icon, a bookmark, a
-    // home-screen shortcut, an iOS Shortcut — so it is filed in Settings, which
-    // is where a person looks for a door of that kind, rather than in the list of
-    // sections.
-    { path: "/quick", page: quickPage },
     { path: "/reports", page: reportsPage },
-    // The Log and the session list are one pair of views over one record, so they
-    // are filed together in the tools layer (see ui/components/nav.js) rather than
-    // given a layer each: "what happened" and "the sessions it happened in" are
-    // two questions about the same thing, and a Log that could not reach the list
-    // of what it was reporting on was a dead end.
-    //
-    // It is a tool over the services rather than one of them, and the only screen
-    // that answers "what did I actually do" across all of them at once. It holds
-    // no record — every line is derived from records that already exist, so there
-    // is nothing extra to export, sync or reconcile. See services/log-service.js.
-    { path: "/log", page: logPage },
-    // /more is not a service: it is the navigation's own list given an address, so
-    // the menu has a bookmark, a home-screen shortcut and a link in a note. The
-    // header's button opens the same list as a sheet, which is the fast path and
-    // the reason this page is not the way people get around.
     { path: "/more", page: morePage },
     { path: "/settings", page: settingsPage },
-    // Under Settings rather than in the list of sections: installing is something
-    // a person does once, and a list that carried it would spend a row on a screen
-    // most people never open. See the note at the top of ui/pages/install.js.
     { path: "/settings/install", page: installPage },
     { path: "/404", page: notFound }
 ]);
@@ -157,13 +84,8 @@ function parkIncomingShare() {
  * every one of them is a row the records will never describe again.
  */
 async function sweepAttachments() {
-    try {
-        const { attachmentService } = await import("./services/attachment-service.js");
-        await attachmentService.sweep();
-    } catch (e) {
-        // A sweep that cannot run is not worth a blank screen. The next one will.
-        console.warn("attachment sweep failed:", e);
-    }
+    // Attachments were not part of the tasks service; nothing to sweep.
+    return;
 }
 
 function showDbError() {

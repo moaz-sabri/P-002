@@ -393,13 +393,7 @@ export function uiIcon(name, { className = "icon", size = null, flip = null } = 
 export const NAV_ICON_NAMES = {
     "/": "home",
     "/tasks": "tasks",
-    "/routines": "repeat",
-    "/later": "bookmark",
-    "/finance": "wallet",
-    "/pages": "file",
-    "/kanban": "kanban",
     "/sessions": "clock",
-    "/log": "history",
     "/reports": "chart",
     "/settings": "sliders",
     "/more": "menu"

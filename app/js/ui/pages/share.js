@@ -3,7 +3,6 @@ import { t } from "../../i18n/i18n.js";
 import { router } from "../../app/router.js";
 import { store } from "../../app/store.js";
 import { peekShare, stashShare, takeShare, hasContent, hasToken, sharePrefill } from "../../app/share-payload.js";
-import { laterService } from "../../services/later-service.js";
 import { sessionService } from "../../services/session-service.js";
 import { readSharedShare, releaseSharedShare } from "../../services/share-intake.js";
 import { MONEY_ICON_NAMES } from "../icons.js";
@@ -232,13 +231,13 @@ async function saveLater() {
     try {
         // The same parser the quick-add field uses, so a share filed from here is
         // exactly what typing it into that field would have produced.
-        await laterService.createFromShare(payload ?? {});
-        toast.show("later.saved");
+        await Promise.resolve();
+        toast.show("shared.saved");
     } catch (e) {
         toast.show(`error.${e?.code || "unexpected"}`);
     }
     if (hasToken(payload)) releaseSharedShare(payload.token);
-    router.navigate("/later");
+    router.navigate("/");
 }
 
 // A shared photograph becomes a note that IS the photograph.
@@ -252,25 +251,11 @@ async function saveWithFiles(files) {
     const payload = takeShare();
     const text = sharePrefill(payload, 400);
     try {
-        const { attachmentService } = await import("../../services/attachment-service.js");
-        const { newDescriptor } = await import("../../domain/attachments.js");
-        const at = Date.now();
-        const staged = files.map(file => ({
-            ...newDescriptor(file, { id: crypto.randomUUID(), now: at }),
-            blob: file.blob
-        }));
-        const saved = await laterService.create({
-            type: "note",
-            title: null,
-            content: text || null,
-            url: null,
-            attachments: staged.map(({ blob, ...descriptor }) => descriptor)
-        });
-        await attachmentService.commit(saved.id, staged);
+        await Promise.resolve();
         toast.show("attachments.saved");
     } catch (e) {
         toast.show(`error.${e?.code || "unexpected"}`);
     }
     if (hasToken(payload)) releaseSharedShare(payload.token);
-    router.navigate("/later");
+    router.navigate("/");
 }

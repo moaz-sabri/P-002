@@ -4,13 +4,6 @@ import { sessionsRepo } from "../data/sessions.repo.js";
 import { eventsRepo } from "../data/events.repo.js";
 import { metaRepo } from "../data/meta.repo.js";
 import { outboxRepo } from "../data/outbox.repo.js";
-import { transactionsRepo } from "../data/transactions.repo.js";
-import { recurringRepo } from "../data/recurring.repo.js";
-import { debtsRepo } from "../data/debts.repo.js";
-import { debtPaymentsRepo } from "../data/debt-payments.repo.js";
-import { categoriesRepo } from "../data/categories.repo.js";
-import { peopleRepo } from "../data/people.repo.js";
-import { laterRepo } from "../data/later.repo.js";
 import { SYNCED_STORES, recordFor } from "../data/stores.js";
 import {
     SYNC_META_KEY,
@@ -377,21 +370,13 @@ async function applyChanges(changes) {
     }
 
     await withTx(
-        ["tasks", "sessions", "events", "meta", "transactions", "recurring", "debts", "debtPayments", "categories", "people", "later", "pages", "pageItems", "routines", "routineLogs"],
+        ["tasks", "sessions", "events", "meta"],
         "readwrite",
         async r => {
             const tr = tasksRepo(r.tasks);
             const sr = sessionsRepo(r.sessions);
             const er = eventsRepo(r.events);
             const mr = metaRepo(r.meta);
-            const dpr = debtPaymentsRepo(r.debtPayments);
-            // The page cascade, read from the registry rather than bound by hand:
-            // a page's items live in a different store from the page, and naming
-            // that pairing here is exactly what the registry exists to prevent.
-            const pir = recordFor("pageItem").repo(r.pageItems);
-            // And the same for a routine's days, which are stored apart from the
-            // rule for the same reason a page's items are.
-            const rlr = recordFor("routineLog").repo(r.routineLogs);
 
             for (const ch of changes) {
                 if (!ch || typeof ch !== "object") continue;
@@ -458,20 +443,6 @@ async function applyChanges(changes) {
                     if (pend && pend.updatedAt >= at) continue;
                     if (local && !pend && at < (local.updatedAt || 0)) continue;
                     if (ch.op === "delete") {
-                        // A debt carries its payments with it: a deleted debt
-                        // must never leave orphaned payments behind, or the
-                        // remaining amount would silently change on this device.
-                        if (type === "debt") await dpr.deleteByDebt(id);
-                        // A page carries its items, for the same reason and with
-                        // the same consequence: an item whose page is gone is
-                        // unreachable, and its position would go on taking part
-                        // in every reorder of a page that no longer exists.
-                        if (type === "page") await pir.deleteByPage(id);
-                        // A routine carries its days with it, for the same reason
-                        // and with the same consequence: a tally whose rule is gone
-                        // is a number no screen can place, and it would keep syncing
-                        // forever as a record nothing can render.
-                        if (type === "routine") await rlr.deleteByRoutine(id);
                         await repo.delete(id);
                         continue;
                     }

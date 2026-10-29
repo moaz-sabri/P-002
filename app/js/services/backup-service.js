@@ -1,7 +1,7 @@
 import { withTx } from "../data/db.js";
-import { RECORDS, BACKUP_STORES, VOCABULARY_TYPES, recordFor } from "../data/stores.js";
+import { RECORDS, BACKUP_STORES, VOCABULARY_TYPES } from "../data/stores.js";
 import { metaRepo } from "../data/meta.repo.js";
-import { assertImportShape, MAX_IMPORT_BYTES, BUILTIN_FINANCE_CATEGORIES } from "../domain/validation.js";
+import { assertImportShape, MAX_IMPORT_BYTES } from "../domain/validation.js";
 import { ImportError, ValidationError } from "../domain/errors.js";
 import { bus } from "../app/bus.js";
 import { broadcastChange } from "../app/sync.js";
@@ -310,31 +310,15 @@ export const backupService = {
         if (pendingOwnerVerifier) await authService.storeOwnerVerifier(pendingOwnerVerifier);
 
         const data = {
-            ...normalizeImport(rawData),
-            ...normalizeFinance(rawData),
-            ...normalizeLater(rawData),
-            ...normalizePages(rawData),
-            ...normalizeKanban(rawData),
-            ...normalizeRoutines(rawData)
+            ...normalizeImport(rawData)
         };
         const preview = { tasks: data.tasks.length, sessions: data.sessions.length, events: data.events.length };
-        for (const key of Object.keys(OVER_CAP)) preview[key] = data[key].length;
-        preview.later = data.later.length;
-        preview.pages = data.pages.length;
-        preview.pageItems = data.pageItems.length;
-        preview.routines = data.routines.length;
-        preview.routineLogs = data.routineLogs.length;
         return { data, preview };
     },
 
     async importAll(data) {
         const clean = {
-            ...normalizeImport(data),
-            ...normalizeFinance(data),
-            ...normalizeLater(data),
-            ...normalizePages(data),
-            ...normalizeKanban(data),
-            ...normalizeRoutines(data)
+            ...normalizeImport(data)
         };
         // Account quotas also apply to restored backups: too many records and
         // the sync server would reject the space. Ask the user to trim or create
@@ -395,17 +379,6 @@ export const backupService = {
     async clearAll() {
         await withTx([...BACKUP_STORES, "meta"], "readwrite", async r => {
             for (const record of RECORDS) await record.repo(r[record.store]).clear();
-            // Categories are the one store that is NOT left empty: the default
-            // category is what every finance form falls back to, and the app
-            // guarantees it exists (it cannot be deleted). Wiping it would leave
-            // the finance forms with nothing to file a new record under, so the
-            // built-in set is restored right here — the same state Migration 5
-            // leaves a brand-new device in. Like the rest of clearAll, nothing is
-            // pushed: a wiped device re-syncs from the server or is set up again.
-            const categories = recordFor("category").repo(r.categories);
-            for (const id of BUILTIN_FINANCE_CATEGORIES) {
-                await categories.put({ id, createdAt: Date.now(), updatedAt: Date.now() });
-            }
             const settings = (await metaRepo(r.meta).get("settings"))?.value || {};
             await metaRepo(r.meta).set("settings", { ...settings, language: settings.language });
         });

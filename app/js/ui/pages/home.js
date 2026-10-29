@@ -6,7 +6,6 @@ import { formatShort, formatTime, formatDateLong, startOfDay } from "../../domai
 import { formatMoney, formatSignedMoney } from "../../domain/money.js";
 import { toast } from "../components/toast.js";
 import { sessionService } from "../../services/session-service.js";
-import { routineService } from "../../services/routine-service.js";
 import { reportService } from "../../services/report-service.js";
 import { router } from "../../app/router.js";
 import { checkBackupReminder } from "../../services/backup-reminder.js";
@@ -115,7 +114,7 @@ export const home = {
         // it and a door out of it, born hidden, and only the render pass decides
         // whether it has anything to say. The order they are appended below is the
         // order the glance is filled in, and it is the order of a morning.
-        const money = this.summary(t("home.money"), "wallet", "/finance");
+        const money = this.summary(t("home.money"), "wallet", "/reports");
         const hours = this.summary(t("home.hoursTitle"), "clock", "/reports");
 
         // ---- Today: routines and tasks --------------------------------------
@@ -153,7 +152,7 @@ export const home = {
             body: tasksBox,
             hidden: true
         });
-        const recent = this.summary(t("home.recent"), "inbox", "/log");
+        const recent = this.summary(t("home.recent"), "inbox", "/reports");
 
         this.routinesBox = routinesBox;
         this.routinesSection = routinesSection;
@@ -201,7 +200,6 @@ export const home = {
             clockDate.textContent = formatDateLong(now);
         });
 
-        this.renderRoutines();
         this.loadGlance();
 
         // Everything below the launcher is one snapshot, so it is drawn together
@@ -215,8 +213,7 @@ export const home = {
         // page having to poll. The counter writes its own row and redraws itself,
         // so it needs no subscription at all.
         const offActive = store.subscribe(s => s.active, () => {
-            this.renderRoutines();
-            this.loadGlance();
+                this.loadGlance();
         });
         this.unsubs = [offTasks, offActive];
 
@@ -269,44 +266,11 @@ export const home = {
      * and the user can navigate away while it is in flight, and a page writing
      * into a node the router already replaced is a silent no-op at best.
      */
-    async renderRoutines() {
-        const box = this.routinesBox;
-        const section = this.routinesSection;
-        if (!box || !section) return;
-        let today;
-        try {
-            today = await routineService.today();
-        } catch {
-            return;   // a read that fails says nothing about the day; leave the screen as it was
-        }
-        if (this.routinesBox !== box || !document.body.contains(box)) return;
-        section.hidden = today.length === 0;
-        if (today.length === 0) return;
-        box.replaceChildren(list(...today.map(view => routineRow(view, {
-            onStart: id => this.startRoutine(id),
-            onBump: (id, delta) => this.bumpRoutine(id, delta)
-        }))));
-    },
+    async renderRoutines() { return; },
 
-    async startRoutine(id) {
-        try {
-            await routineService.start(id);
-            router.navigate("/session");
-        } catch (e) {
-            toast.show(`error.${e?.code || "unexpected"}`);
-        }
-    },
+    async startRoutine(id) { return; },
 
-    async bumpRoutine(id, delta) {
-        try {
-            await routineService.bump(id, delta);
-            haptics.do("ack");
-            await this.renderRoutines();
-            this.loadGlance();
-        } catch (e) {
-            toast.show(`error.${e?.code || "unexpected"}`);
-        }
-    },
+    async bumpRoutine(id, delta) { return; },
 
     /**
      * Read the whole screen in one transaction, then draw it.
