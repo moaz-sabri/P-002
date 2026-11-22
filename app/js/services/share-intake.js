@@ -6,6 +6,7 @@ import {
     kindForFile
 } from "../domain/attachments.js";
 import { probeMedia, probeImage, shrinkPhoto } from "../app/capture.js";
+import { LOCAL_ONLY } from "../config.js";
 
 // The client half of the Web Share Target.
 //
@@ -45,6 +46,11 @@ function codeFor(status) {
  * same selection, which is the wrong trade in both directions.
  */
 export async function readSharedShare(token) {
+    if (LOCAL_ONLY) {
+        const error = new Error("local_only");
+        error.code = "local_only";
+        throw error;
+    }
     if (typeof token !== "string" || !/^[a-f0-9]{32}$/.test(token)) return null;
 
     let meta;

@@ -14,7 +14,7 @@
 // is the sweep: the previous release's hashed assets stay in the cache until
 // the next one deletes the whole thing, which is the right trade for a handful
 // of files on a device that is usually offline anyway.
-const CACHE = "task-timer-v1.3.0";
+const CACHE = "notes-v2.0.0";
 
 // The ONE key the app shell is filed under, whatever path the navigation that
 // fetched it happened to use.

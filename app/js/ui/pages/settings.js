@@ -1,6 +1,6 @@
 import { h } from "../dom.js";
 import { t, setLanguage, getLanguage } from "../../i18n/i18n.js";
-import { APP_VERSION } from "../../config.js";
+import { APP_VERSION, LOCAL_ONLY } from "../../config.js";
 import { router } from "../../app/router.js";
 import { store } from "../../app/store.js";
 import { backupService } from "../../services/backup-service.js";
@@ -526,7 +526,7 @@ export const settingsPage = {
 
             buildDeviceSection(),
 
-            pageSection({
+            !LOCAL_ONLY && pageSection({
                 title: t("settings.syncTitle"),
                 icon: "cloud",
                 body: h("div", {}, ...syncInputs, syncStatusEl)

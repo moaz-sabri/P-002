@@ -20,6 +20,7 @@ import { requestSignal } from "../app/net.js";
 import { buildSyncFile, serializeSyncFile, parseSyncFile, syncFileName } from "./sync-file.js";
 import * as cryptoService from "./crypto-service.js";
 import { authService } from "./auth-service.js";
+import { LOCAL_ONLY } from "../config.js";
 
 const API_BASE = "/api";
 
@@ -504,6 +505,7 @@ export const syncService = {
     async pendingCount() { return withTx(["outbox"], "readonly", r => outboxRepo(r.outbox).getAll()).then(a => a.length); },
 
     async createSpace({ code, password }) {
+        if (LOCAL_ONLY) return { ok: false, code: "local_only" };
         const cfg = await this.ensureConfig();
         if (!cfg) return { ok: false, code: "not_configured" };
         try {
@@ -528,6 +530,7 @@ export const syncService = {
     },
 
     async openSpace({ code, password }) {
+        if (LOCAL_ONLY) return { ok: false, code: "local_only" };
         const cfg = await this.ensureConfig();
         if (!cfg) return { ok: false, code: "not_configured" };
         try {
@@ -598,12 +601,14 @@ export const syncService = {
     // debounce use — there is no second implementation of "sync" for a button to
     // drift away from.
     async syncNow() {
+        if (LOCAL_ONLY) return { ok: false, code: "local_only", sent: 0, pulled: 0 };
         const detail = { sent: 0, pulled: 0 };
         const res = await syncNowInternal(detail);
         return { ...res, sent: detail.sent, pulled: detail.pulled };
     },
 
     async setup() {
+        if (LOCAL_ONLY) return;
         if (typeof window === "undefined") return;
         // Idempotent, and it has to be: setup() adds four listeners and a timer,
         // and calling it twice would leave a second interval running behind the

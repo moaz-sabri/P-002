@@ -1,5 +1,5 @@
 import * as cryptoService from "./crypto-service.js";
-import { SESSION_ROOTATION_MS, SYNC_REQUEST_TIMEOUT_MS } from "../config.js";
+import { SESSION_ROOTATION_MS, SYNC_REQUEST_TIMEOUT_MS, LOCAL_ONLY } from "../config.js";
 import { requestSignal } from "../app/net.js";
 
 let masterKey = null;
@@ -166,6 +166,7 @@ export const authService = {
 // caller (rotateSession) decides whether the session is still alive from what
 // comes back, and a swallowed 401 reads exactly like a successful rotation.
 async function fetchJson(path, body) {
+    if (LOCAL_ONLY) return { ok: false, code: "local_only" };
     let res;
     try {
         res = await fetch(`/api/${path}`, {

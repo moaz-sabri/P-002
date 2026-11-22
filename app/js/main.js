@@ -26,11 +26,11 @@ import { renderNav } from "./ui/components/nav.js";
 import { sessionStrip } from "./ui/components/session-strip.js";
 import { addButton } from "./ui/components/add-button.js";
 import { bus } from "./app/bus.js";
-import { syncService } from "./services/sync-service.js";
 import { checkBackupReminder } from "./services/backup-reminder.js";
 import { toast } from "./ui/components/toast.js";
 import { errorView } from "./ui/components/ui.js";
 import { h } from "./ui/dom.js";
+import { LOCAL_ONLY } from "./config.js";
 
 const SHARE_PATH = "/share";
 
@@ -183,6 +183,13 @@ function setupServiceWorkerMessages() {
 // the router.
 async function startApp() {
     const app = document.getElementById("app");
+    // Local-only Notes has no account, encryption key, or server handshake.
+    // Start the shell immediately; the old onboarding flow belongs only to the
+    // optional encrypted-sync product and must not block local use.
+    if (LOCAL_ONLY) {
+        await router.start();
+        return true;
+    }
     let firstRun = false;
     try {
         firstRun = await shouldRunOnboarding({
@@ -222,7 +229,7 @@ function afterRouteStart() {
     // register its pending save before anything does.
     installFlushTriggers();
     checkBackupReminder();
-    syncService.setup();
+    // Notes is local-only in the current release: no background server request.
 }
 
 async function boot() {
@@ -240,7 +247,9 @@ async function boot() {
         initLanguage(store.getState().settings.language);
         store.setState({ ready: true });
 
-        if (store.getState().tasks.length > 0) await requestPersistence();
+        // Ask for persistent storage as soon as the app is used so browser
+        // eviction is less likely to remove the user's local data.
+        await requestPersistence();
         bus.on("route", path => renderNav(path));
 
         parkIncomingShare();

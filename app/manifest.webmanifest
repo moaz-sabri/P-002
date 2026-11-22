@@ -1,8 +1,8 @@
 {
     "id": "/",
-    "name": "Tasker",
-    "short_name": "Tasker",
-    "description": "A simple, local-first personal application for tasks and timed sessions.",
+    "name": "Notes",
+    "short_name": "Notes",
+    "description": "A private, local-first personal notes application.",
     "start_url": "/",
     "scope": "/",
     "display": "standalone",
@@ -12,22 +12,6 @@
     "theme_color": "#000000",
     "categories": ["productivity", "utilities"],
     "prefer_related_applications": false,
-    "share_target": {
-        "action": "/api/share/intake",
-        "method": "POST",
-        "enctype": "multipart/form-data",
-        "params": {
-            "title": "title",
-            "text": "text",
-            "url": "url",
-            "files": [
-                {
-                    "name": "files",
-                    "accept": ["image/*", "audio/*", "video/*", ".pdf", ".txt", ".md", ".csv", ".json", ".rtf", ".epub", ".doc", ".docx", ".odt", ".xls", ".xlsx", ".ods", ".ppt", ".pptx", ".odp"]
-                }
-            ]
-        }
-    },
     "shortcuts": [
         {
             "name": "Start a session",

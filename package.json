@@ -34,6 +34,9 @@
     "scripts": {
         "build:assets": "webpack --mode production",
         "build": "npm run build:assets",
+        "check:i18n": "node tools/check-i18n.mjs",
+        "test:client": "node --test",
+        "test:api": "php api/tests/run.php",
         "dev": "npm run build:assets && php -d enable_post_data_reading=0 -S 127.0.0.1:8080 -t app docker-router.php"
     },
     "devDependencies": {

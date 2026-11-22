@@ -232,7 +232,7 @@ async function saveLater() {
         // The same parser the quick-add field uses, so a share filed from here is
         // exactly what typing it into that field would have produced.
         await Promise.resolve();
-        toast.show("shared.saved");
+        toast.show("share.saved");
     } catch (e) {
         toast.show(`error.${e?.code || "unexpected"}`);
     }
